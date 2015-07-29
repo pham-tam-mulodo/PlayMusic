@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="vn.com.mulodo.popup.test">
+
+    <uses-sdk android:minSdkVersion="22" android:targetSdkVersion="22" />
+
+    <application>
+        <uses-library android:name="android.test.runner" />
+    </application>
+
+    <instrumentation android:name="android.test.InstrumentationTestRunner"
+                     android:targetPackage="vn.com.mulodo.popup"
+                     android:handleProfiling="false"
+                     android:functionalTest="false"
+                     android:label="Tests for vn.com.mulodo.popup"/>
+</manifest>
