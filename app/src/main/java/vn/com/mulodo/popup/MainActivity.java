@@ -208,7 +208,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(MainActivity.this, result.get((int) id).getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, result.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

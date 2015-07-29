@@ -18,8 +18,7 @@ public class MusicAdapter extends ArrayAdapter<ListMusic> {
     private List<ListMusic> mDataList;
     private Context mContext;
     private int mLayoutResourceId;
-    TextView title;
-    TextView artist;
+
     public MusicAdapter(Context context, int resource, List<ListMusic> data) {
         super(context, resource, data);
         mDataList = data;
@@ -30,21 +29,36 @@ public class MusicAdapter extends ArrayAdapter<ListMusic> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
+        MusicViewHolder holder = null;
         if (rowView == null) {
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             rowView = inflater.inflate(mLayoutResourceId, parent, false);
 
-            title = (TextView) rowView.findViewById(R.id.textSongName);
-            artist = (TextView) rowView.findViewById(R.id.textSingerName);
+            holder = new MusicViewHolder(rowView);
+
+            //remember the view
+            rowView.setTag(holder);
+        } else {
+            holder = (MusicViewHolder) rowView.getTag();
         }
 
         ListMusic data = mDataList.get(position);
         if (data != null) {
-            title.setText(data.getTitle());
-            artist.setText(data.getArtist());
+            holder.title.setText(data.getTitle());
+            holder.artist.setText(data.getArtist());
 
         }
 
         return rowView;
+    }
+
+    static class MusicViewHolder {
+        public TextView title;
+        public TextView artist;
+
+        public MusicViewHolder(View v) {
+            title = (TextView) v.findViewById(R.id.textSongName);
+            artist = (TextView) v.findViewById(R.id.textSingerName);
+        }
     }
 }
