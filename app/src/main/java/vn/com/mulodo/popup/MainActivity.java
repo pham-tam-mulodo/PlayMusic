@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,9 +17,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpConnection;
 import org.apache.http.HttpConnectionMetrics;
@@ -46,6 +55,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
     EditText keyword;
     ListView listView;
     Spinner server;
+    List<ListMusic> allListMusic;
+    FrameLayout musicPlayer;
+    ImageButton btnPlay;
+    MediaPlayer mediaPlayer;
+    Boolean stopPlay = false;
+    int songLength = 0;
+
+    ImageButton prev;
+    ImageButton next;
+
+    int prevId = 0;
+    int nextId = 0;
+
+    TextView titleFrame;
+    TextView singerFrame;
+    ImageView avatarFrame;
+
+    private Context context = MainActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +85,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         server = (Spinner) findViewById(R.id.server);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.server, android.R.layout.simple_spinner_dropdown_item);
         server.setAdapter(adapter);
+
+        musicPlayer = (FrameLayout) findViewById(R.id.playerController);
+        musicPlayer.setVisibility(View.GONE);
+
+        btnPlay = (ImageButton) findViewById(R.id.playPause);
+        btnPlay.setOnClickListener(this);
+
+        prev = (ImageButton) findViewById(R.id.prev);
+        prev.setOnClickListener(this);
+
+        next = (ImageButton) findViewById(R.id.next);
+        next.setOnClickListener(this);
     }
 
     @Override
@@ -65,6 +104,94 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    private void playMusic(int id) {
+
+        try {
+            if (null == allListMusic || allListMusic.size() == 0) {
+                Toast.makeText(MainActivity.this, "No song to play", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            List<ListMusic> temp = allListMusic;
+
+            int curId = id;
+            if (curId >= 0) {
+                prevId = curId - 1;
+            }
+
+            if (curId < allListMusic.size() - 1)
+            {
+                nextId = curId + 1;
+            }
+
+            Log.i("Id", "CurID: " + curId + " PrevId: " + prevId + " NextId: " + nextId);
+
+            titleFrame = (TextView) findViewById(R.id.title_frame);
+            singerFrame = (TextView) findViewById(R.id.singer_frame);
+            avatarFrame = (ImageView) findViewById(R.id.avatar_frame);
+
+            String title = allListMusic.get(id).getTitle();
+            //title = title.substring(0, 20);
+            titleFrame.setText(title);
+            singerFrame.setText(allListMusic.get(id).getArtist());
+            //context = this;
+            Log.i("Avatar", allListMusic.get(id).getAvatar());
+            Picasso.with(context)
+                    .load(allListMusic.get(id).getAvatar())
+                    .placeholder(R.drawable.final1)
+                    .error(R.drawable.error)
+                    .into(avatarFrame);
+
+            String url = temp.get(id).getUrl(); // your URL here
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepare(); // might take long! (for buffering, etc)
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(mOnCompletionListener);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
+
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            if (mediaPlayer != null) {
+               nextSong();
+            }
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        if(!mediaPlayer.isPlaying())
+        {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        super.onPause();
+        mediaPlayer.pause();
+        songLength = mediaPlayer.getCurrentPosition();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mediaPlayer.seekTo(songLength);
+        mediaPlayer.start();
+    }
+
+    private void stopMusic() {
+        if (null != mediaPlayer) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
     @Override
@@ -85,24 +212,58 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        keyword = (EditText) findViewById(R.id.keyword);
+        if (v.getId() == R.id.button) {
+            keyword = (EditText) findViewById(R.id.keyword);
 
-        //str = "http://j.ginggong.com/jOut.ashx?k=" + keyword.getText().toString() + "&h=&code=test_code";
-        strKeyword = keyword.getText().toString();
-        getMusic list = new getMusic();
+            //str = "http://j.ginggong.com/jOut.ashx?k=" + keyword.getText().toString() + "&h=&code=test_code";
+            strKeyword = keyword.getText().toString();
+            getMusic list = new getMusic();
 
-        strServer = "";
+            strServer = "";
 
-        long serverId = (null == server) ? 0 : server.getSelectedItemId();
+            long serverId = (null == server) ? 0 : server.getSelectedItemId();
 
-        if (serverId > 0) {
-            strServer = server.getItemAtPosition((int) serverId).toString();
+            if (serverId > 0) {
+                strServer = server.getItemAtPosition((int) serverId).toString();
+            }
+
+
+            //String[] urls = {"http://download 1", "http://download 2"};
+            //String urls = "http://download3"; // = param[0]
+            list.execute(new String[]{strKeyword, strServer});
         }
+        else if (v.getId() == R.id.playPause) {
+            stopPlay = !stopPlay;
+            if(stopPlay) {
+                onPause();
+                btnPlay.setBackgroundResource(R.drawable.play);
+            } else {
+                if (mediaPlayer != null)
+                {
+                    btnPlay.setBackgroundResource(R.drawable.pause);
+                    onRestart();
+                }
+            }
+        }
+        else if (v.getId() == R.id.prev) {
+            prevSong();
+        } else if (v.getId() == R.id.next) {
+            nextSong();
+        }
+    }
 
+    private void nextSong() {
+        if (nextId != 0) {
+            stopMusic();
+            playMusic(nextId);
+        }
+    }
 
-        //String[] urls = {"http://download 1", "http://download 2"};
-        //String urls = "http://download3"; // = param[0]
-        list.execute(new String[]{strKeyword, strServer});
+    private void prevSong() {
+        if (prevId >= 0) {
+            stopMusic();
+            playMusic(prevId);
+        }
     }
 
     private class getMusic extends AsyncTask<String, Void, List<ListMusic>> {
@@ -165,15 +326,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Log.i("Popup", jsonString);
 
                 JSONArray rootJson = new JSONArray(jsonString);
-                String title, artist;
+                String title, artist, avatar, urlDownload, hostName;
 
 
                 for (int i = 0; i < rootJson.length(); i++) {
                     JSONObject songNodes = rootJson.getJSONObject(i);
                     title = songNodes.getString("Title");
                     artist = songNodes.getString("Artist");
+                    avatar = songNodes.getString("Avatar");
+                    urlDownload = songNodes.getString("UrlJunDownload");
+                    hostName = songNodes.getString("HostName");
 
-                    listMusic.add(new ListMusic(title, artist));
+
+                    listMusic.add(new ListMusic(title, artist, urlDownload, avatar, hostName));
                 }
 
             } catch (MalformedURLException e) {
@@ -197,6 +362,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(final List<ListMusic> result) {
+            allListMusic = result;
             Log.i("Popup", "onPostExecute");
             if(result == null) {
                 Log.i("Popup", "Null");
@@ -209,6 +375,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(MainActivity.this, result.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+
+                    stopMusic();
+
+
+                    playMusic((int) id);
+                    musicPlayer.setVisibility(View.VISIBLE);
+                    btnPlay.setBackgroundResource(R.drawable.pause);
                 }
             });
         }

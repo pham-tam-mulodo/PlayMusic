@@ -18,17 +18,30 @@ public final class R {
         public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
-        public static final int final1=0x7f020000;
+        public static final int error=0x7f020000;
+        public static final int final1=0x7f020001;
+        public static final int next=0x7f020002;
+        public static final int pause=0x7f020003;
+        public static final int play=0x7f020004;
+        public static final int prev=0x7f020005;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0008;
+        public static final int action_settings=0x7f0a0010;
+        public static final int avatar_frame=0x7f0a0006;
         public static final int button=0x7f0a0003;
-        public static final int imageAvatar=0x7f0a0005;
+        public static final int hostName=0x7f0a000f;
+        public static final int imageAvatar=0x7f0a000c;
         public static final int keyword=0x7f0a0001;
         public static final int list=0x7f0a0004;
+        public static final int next=0x7f0a000b;
+        public static final int playPause=0x7f0a000a;
+        public static final int playerController=0x7f0a0005;
+        public static final int prev=0x7f0a0009;
         public static final int server=0x7f0a0002;
-        public static final int textSingerName=0x7f0a0007;
-        public static final int textSongName=0x7f0a0006;
+        public static final int singer_frame=0x7f0a0008;
+        public static final int textSingerName=0x7f0a000e;
+        public static final int textSongName=0x7f0a000d;
+        public static final int title_frame=0x7f0a0007;
         public static final int top=0x7f0a0000;
     }
     public static final class layout {

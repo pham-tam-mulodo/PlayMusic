@@ -25,13 +25,39 @@
             android:singleLine="true"
             android:textStyle="bold"
             android:text="a row in listview" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textSingerName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="Singer" />
+            <TextView
+                android:id="@+id/textSingerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="Singer" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" - "
+                />
+
+            <TextView
+                android:id="@+id/hostName"
+                android:text="Server"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
+
+
+
 </LinearLayout>
 <!-- From: file:/Users/vanthom/StudioProjects/Popup/app/src/main/res/layout/listview_row.xml -->

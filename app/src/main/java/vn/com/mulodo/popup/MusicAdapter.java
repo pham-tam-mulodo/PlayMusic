@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -46,6 +49,14 @@ public class MusicAdapter extends ArrayAdapter<ListMusic> {
         if (data != null) {
             holder.title.setText(data.getTitle());
             holder.artist.setText(data.getArtist());
+            holder.hostName.setText(data.getHostName());
+            if (null != data.getAvatar() && !data.getAvatar().isEmpty()) {
+                Picasso.with(mContext)
+                        .load(data.getAvatar())
+                        .placeholder(R.drawable.final1)
+                        .error(R.drawable.error)
+                        .into(holder.avatar);
+            }
 
         }
 
@@ -55,10 +66,14 @@ public class MusicAdapter extends ArrayAdapter<ListMusic> {
     static class MusicViewHolder {
         public TextView title;
         public TextView artist;
+        public TextView hostName;
+        public ImageView avatar;
 
         public MusicViewHolder(View v) {
             title = (TextView) v.findViewById(R.id.textSongName);
             artist = (TextView) v.findViewById(R.id.textSingerName);
+            avatar = (ImageView) v.findViewById(R.id.imageAvatar);
+            hostName = (TextView) v.findViewById(R.id.hostName);
         }
     }
 }

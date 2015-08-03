@@ -1,12 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:layout_height="match_parent" tools:context=".MainActivity">
 
     <RelativeLayout
         android:id="@+id/top"
+        android:padding="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -35,11 +33,88 @@
     <ListView
         android:id="@+id/list"
         android:layout_below="@+id/top"
-        android:paddingTop="10dp"
+        android:paddingTop="0dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="72dp">
 
     </ListView>
+
+    <FrameLayout
+        android:id="@+id/playerController"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:background="#272523">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/avatar_frame"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/final1"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/title_frame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:textColor="#ffffff"
+                    android:text="Singer" />
+                <TextView
+                    android:id="@+id/singer_frame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:textColor="#ffffff"
+                    android:text="Singer" />
+
+
+                    />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/prev"
+                android:background="@drawable/prev"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                />
+            <ImageButton
+                android:id="@+id/playPause"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/pause"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+            <ImageButton
+                android:id="@+id/next"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/next"
+                />
+        </LinearLayout>
+
+
+
+
+    </FrameLayout>
 
 </RelativeLayout>
 <!-- From: file:/Users/vanthom/StudioProjects/Popup/app/src/main/res/layout/activity_main.xml -->
