@@ -37,8 +37,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="72dp">
+        android:layout_height="wrap_content">
 
     </ListView>
 

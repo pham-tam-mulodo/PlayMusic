@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -143,6 +145,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     .placeholder(R.drawable.final1)
                     .error(R.drawable.error)
                     .into(avatarFrame);
+
+            // set icon pause
+            btnPlay.setBackgroundResource(R.drawable.pause);
 
             String url = temp.get(id).getUrl(); // your URL here
             mediaPlayer = new MediaPlayer();
@@ -381,6 +386,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     playMusic((int) id);
                     musicPlayer.setVisibility(View.VISIBLE);
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) listView.getLayoutParams();
+                    layoutParams.setMargins(0,0,0,216);
+                    listView.setLayoutParams(layoutParams);
+
                     btnPlay.setBackgroundResource(R.drawable.pause);
                 }
             });
